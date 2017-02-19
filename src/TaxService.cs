@@ -39,22 +39,29 @@ namespace AspNetSelfHostDemo
             {
                 throw new ArgumentException("City property is missing or invalid");
             }
-            if (taxRecord.Year.HasValue == false || taxRecord.Year.Value < 0)
-            {
-                throw new ArgumentException("Year property is missing or invalid");
-            }
-            if (taxRecord.Month.HasValue && (taxRecord.Month.Value < 1 || taxRecord.Month.Value > 12))
-            {
-                throw new ArgumentException("Month property is invalid. Valid range: 1-12");
-            }
             if (string.IsNullOrEmpty(taxRecord.Day) == false)
             {
-                // TODO check for month/week input
+                // TODO check for year/month/week input
                 DateTime dayDateTime;
                 var parseResult = DateTime.TryParse(taxRecord.Day, out dayDateTime);
                 if (!parseResult)
                     throw new ArgumentException("Day property is invalid. Expected date in acceptable format (e.g. YYYY.MM.DD)");
             }
+
+
+            if (taxRecord.Year.HasValue == false || taxRecord.Year.Value < 0)
+            {
+                throw new ArgumentException("Year property is missing or invalid");
+            }
+            // TODO if no month/week value, update by year
+
+
+            // TODO check xor for month & week
+            if (taxRecord.Month.HasValue && (taxRecord.Month.Value < 1 || taxRecord.Month.Value > 12))
+            {
+                throw new ArgumentException("Month property is invalid. Valid range: 1-12");
+            }
+
         }
     }
 }

@@ -94,6 +94,27 @@ namespace TaxTests
                 Throws.TypeOf<ArgumentException>().With.Message.Contain("Day property"));
         }
 
+        [TestCase(1, null, null)]
+        [TestCase(null, 1, null)]
+        [TestCase(null, null, 1)]
+        [TestCase(1, 1, null)]
+        [TestCase(1, null, 1)]
+        [TestCase(null, 1, 1)]
+        public void ThrowsWhenIncorrectTaxRecord_DayAndOtherTypeIsPresent(int? year, int? month, int? weekNr)
+        {
+            var taxRecord = new TaxRecord
+            {
+                City = "a",
+                Year = year,
+                Month = month,
+                WeekOfYear = weekNr,
+                Day = "2016.10.10"
+            };
+
+            Assert.That(() => _sut.UpdateTaxes(taxRecord),
+                Throws.TypeOf<ArgumentException>().With.Message.Contain("one type of tax"));
+        }
+
         [Test]
         public void UpdatesTaxesByDay()
         {
