@@ -9,11 +9,14 @@ namespace TaxTests
     public class TaxServiceTests
     {
         private TaxService _sut;
+        private Mock<ITaxRepository> _taxRepository;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new TaxService();
+            _taxRepository = new Mock<ITaxRepository>();
+            _taxRepository.Setup(m => m.GetAllTaxes()).Returns(1);
+             _sut = new TaxService(_taxRepository.Object);
         }
 
         [Test]

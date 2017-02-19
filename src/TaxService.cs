@@ -9,9 +9,16 @@ namespace AspNetSelfHostDemo
 
     public class TaxService : ITaxService
     {
+        private readonly ITaxRepository _taxRepository;
+
+        public TaxService(ITaxRepository taxRepository)
+        {
+            _taxRepository = taxRepository;
+        }
+
         public decimal GetTax(string municipality, DateTime date)
         {
-            throw new NotImplementedException();
+            return _taxRepository.GetAllTaxes();
         }
     }
 }
