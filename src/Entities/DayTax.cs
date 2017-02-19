@@ -8,7 +8,7 @@ namespace AspNetSelfHostDemo.Entities
 {
     class YearTax
     {
-        public decimal Tax { get; set; }
+        public decimal YearlyTax { get; set; }
         public Dictionary<int, decimal> DayTaxes { get; set; }
         public Dictionary<int, decimal> MonthTaxes { get; set; }
     }

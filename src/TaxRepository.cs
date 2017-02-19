@@ -24,12 +24,30 @@ namespace AspNetSelfHostDemo
 
         public void AddYearlyTax(string city, int year, decimal tax)
         {
-            return;
+            YearTax value = null;
+            if (_cityTaxes.TryGetValue(city, out value))
+            {
+                value.YearlyTax = tax;
+            }
+            else
+            {
+                _cityTaxes.Add(city, new YearTax() { YearlyTax = tax });
+            }
+            
         }
 
         public decimal GetTax(string city, DateTime date)
         {
-            return 1m;
+            YearTax taxByYear = null;
+            if (_cityTaxes.TryGetValue(city, out taxByYear) == false)
+            {
+                return 0m;
+            }
+            else
+            {
+                // TODO upgrade logic
+                return taxByYear.YearlyTax;
+            }
         }
 
         public decimal GetAllTaxes()
