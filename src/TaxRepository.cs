@@ -20,6 +20,7 @@ namespace AspNetSelfHostDemo
         public TaxRepository()
         {
             _cityTaxes = new Dictionary<string, YearTax>();
+            AddYearlyTax("b", 2016, 0.2m);
         }
 
         public void AddYearlyTax(string city, int year, decimal tax)

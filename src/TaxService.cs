@@ -26,7 +26,7 @@ namespace AspNetSelfHostDemo
             }
             catch (Exception e)
             {
-                throw new ArgumentException("Invalid date provided " + e.GetType());
+                throw new ArgumentException($"Invalid date provided ({dateString})");
             }
         }
     }
