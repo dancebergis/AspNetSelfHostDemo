@@ -43,11 +43,9 @@ namespace AspNetSelfHostDemo
 
         private static void Configure(HttpRouteCollection routes)
         {
-            routes.MapHttpRoute(
-                            name: "TaxApi",
-                            routeTemplate: "api/{controller}/{municipality}/{date}",
-                            defaults: new { municipality = RouteParameter.Optional, date = RouteParameter.Optional }
-                        );
+            routes.MapHttpRoute("TaxApi", "api/{controller}/{municipality}/{date}",
+                new {municipality = RouteParameter.Optional, date = RouteParameter.Optional}
+                );
         }
     }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using AspNetSelfHostDemo.Entities;
 
 namespace AspNetSelfHostDemo
 {
@@ -33,9 +35,18 @@ namespace AspNetSelfHostDemo
             }
         }
 
-        //// POST api/tax ???
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        public string Post([FromBody] TaxRecord taxRecord)
+        {
+            try
+            {
+                _taxService.UpdateTaxes(taxRecord);
+                return "OK";
+            }
+            catch (ArgumentException e)
+            {
+                StatusCode(HttpStatusCode.BadRequest);
+                return e.Message;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AspNetSelfHostDemo.Entities
 {
@@ -11,4 +12,15 @@ namespace AspNetSelfHostDemo.Entities
 
         public Dictionary<int, YearTax> YearTaxes { get; set; }
     }
+
+    public class TaxRecord
+    {
+        public string City { get; set; }
+        public int? Year { get; set; }
+        public int? Month { get; set; }
+        public int? WeekOfYear { get; set; }
+        public string Day { get; set; }
+        public decimal? Tax { get; set; }
+    }
+
 }
