@@ -15,7 +15,7 @@ namespace AspNetSelfHostDemo
         // GET api/tax/Vilnius/2016.01.01
         public string Get(string municipality, string date)
         {
-            return _taxService.GetTax(municipality, DateTime.UtcNow).ToString();
+            return _taxService.GetTax(municipality, date).ToString();
         }
 
         //// POST api/tax ???
