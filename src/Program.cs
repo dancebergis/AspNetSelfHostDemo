@@ -45,12 +45,6 @@ namespace AspNetSelfHostDemo
         private static void Configure(HttpRouteCollection routes)
         {
             routes.MapHttpRoute(
-                    "DefaultApiWithId",
-                    "Api/{controller}/{id}",
-                    new { id = RouteParameter.Optional },
-                    new { id = @"\d+" });
-
-            routes.MapHttpRoute(
                             name: "TaxApi",
                             routeTemplate: "api/{controller}/{municipality}/{date}",
                             defaults: new { municipality = RouteParameter.Optional, date = RouteParameter.Optional }
@@ -79,6 +73,7 @@ namespace AspNetSelfHostDemo
         {
             Bind<ISampleDependency>().To<SampleDependency>();
             Bind<ITaxService>().To<TaxService>();
+            Bind<ITaxRepository>().To<TaxRepository>();
         }
     }
 

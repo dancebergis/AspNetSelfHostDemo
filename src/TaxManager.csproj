@@ -123,6 +123,7 @@
     <Compile Include="NancyDemo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaxRepository.cs" />
     <Compile Include="TaxService.cs" />
   </ItemGroup>
   <ItemGroup>
