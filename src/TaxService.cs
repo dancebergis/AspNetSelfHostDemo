@@ -35,6 +35,10 @@ namespace AspNetSelfHostDemo
 
         public void UpdateTaxes(TaxRecord taxRecord)
         {
+            if (taxRecord == null)
+            {
+                throw new ArgumentException("Input data is invalid. See manual (Readme) for expected input formats");
+            }
             if (string.IsNullOrEmpty(taxRecord.City))
             {
                 throw new ArgumentException("City property is missing or invalid");

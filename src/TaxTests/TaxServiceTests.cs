@@ -34,6 +34,12 @@ namespace TaxTests
                 Throws.TypeOf<ArgumentException>().With.Message.Contain("Invalid date provided"));
         }
 
+        [Test]
+        public void ThrowsWhenIncorrectTaxRecord_Null()
+        {
+            Assert.That(() => _sut.UpdateTaxes(null),
+                Throws.TypeOf<ArgumentException>().With.Message.Contain("Input data is invalid"));
+        }
 
         [TestCase(null)]
         [TestCase("")]
@@ -121,7 +127,6 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
-                Year = 100,
                 Day = "2016.02.02"
             };
             _sut.UpdateTaxes(taxRecord);
