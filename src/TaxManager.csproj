@@ -116,13 +116,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomContentTypeProvider.cs" />
-    <Compile Include="CustomMiddleware.cs" />
     <Compile Include="TaxController.cs" />
-    <Compile Include="DemoController.cs" />
-    <Compile Include="NancyDemo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaxManagerService.cs" />
     <Compile Include="TaxRepository.cs" />
     <Compile Include="TaxService.cs" />
   </ItemGroup>
