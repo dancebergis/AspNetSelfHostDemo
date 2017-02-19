@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AspNetSelfHostDemo.Entities;
 
 namespace AspNetSelfHostDemo
@@ -14,63 +11,80 @@ namespace AspNetSelfHostDemo
 
     public class TaxRepository : ITaxRepository
     {
-        private Dictionary<string, YearTax> _cityTaxesCache;
+        private readonly Dictionary<string, CityTax> _cityTaxesCache;
 
         public TaxRepository()
         {
-            _cityTaxesCache = new Dictionary<string, YearTax>();
-            AddYearlyTax("b", 2016, 0.2m);
+            _cityTaxesCache = new Dictionary<string, CityTax>();
         }
 
         public void AddYearlyTax(string city, int year, decimal tax)
         {
-            var cityTaxes = GetTaxData(city);
-            if (cityTaxes == null)
+            var cityTaxes = GetCityTaxes(city);
+
+            YearTax yearlyTax;
+            if (cityTaxes.YearTaxes.TryGetValue(year, out yearlyTax))
             {
-                _cityTaxesCache.Add(city, new YearTax() {YearlyTax = tax});
+                yearlyTax.YearlyTax = tax;
             }
             else
             {
-                cityTaxes.YearlyTax = tax;
+                yearlyTax = new YearTax {YearlyTax = tax};
+                cityTaxes.YearTaxes.Add(year, yearlyTax);
             }
         }
 
         public void AddMonthlyTax(string city, int year, int month, decimal tax)
         {
-            var cityTaxes = GetTaxData(city);
-            if (cityTaxes == null)
+            var cityTaxes = GetCityTaxes(city);
+
+            YearTax yearlyTax;
+            if (cityTaxes.YearTaxes.TryGetValue(year, out yearlyTax) == false)
             {
-                cityTaxes = new YearTax();
-                _cityTaxesCache.Add(city, cityTaxes);
+                yearlyTax = new YearTax();
+                cityTaxes.YearTaxes.Add(year, yearlyTax);
             }
 
             decimal monthlyTax;
-            if (cityTaxes.MonthTaxes.TryGetValue(month, out monthlyTax))
+            if (yearlyTax.MonthTaxes.TryGetValue(month, out monthlyTax))
             {
-                cityTaxes.MonthTaxes.Remove(month);
+                yearlyTax.MonthTaxes.Remove(month);
             }
-            cityTaxes.MonthTaxes.Add(month, tax);
+            yearlyTax.MonthTaxes.Add(month, tax);
         }
 
         public decimal GetTax(string city, DateTime date)
         {
-            YearTax taxByYear = null;
-            if (_cityTaxesCache.TryGetValue(city, out taxByYear) == false)
+            CityTax cityTaxes = null;
+            if (_cityTaxesCache.TryGetValue(city, out cityTaxes) == false)
             {
                 return 0m;
             }
-            else
+
+            // TODO upgrade logic: weeks, days
+            YearTax cityTax;
+            if (cityTaxes.YearTaxes.TryGetValue(date.Year, out cityTax))
             {
-                // TODO upgrade logic
-                return taxByYear.YearlyTax;
+                decimal monthlyTax;
+                if (cityTax.MonthTaxes.TryGetValue(date.Month, out monthlyTax))
+                {
+                    return monthlyTax;
+                }
+                return cityTax.YearlyTax;
             }
+            return 0m;
         }
 
-        private YearTax GetTaxData(string city)
+        private CityTax GetCityTaxes(string city)
         {
-            YearTax value = null;
-            _cityTaxesCache.TryGetValue(city, out value);
-            return value;
+            CityTax cityTaxes;
+            _cityTaxesCache.TryGetValue(city, out cityTaxes);
+            if (cityTaxes == null)
+            {
+                cityTaxes = new CityTax();
+                _cityTaxesCache.Add(city, cityTaxes);
+            }
+            return cityTaxes;
         }
     }
 }

@@ -21,7 +21,11 @@ namespace AspNetSelfHostDemo.Entities
 
     public class CityTax
     {
-        public string CityName { get; set; }
+        public CityTax()
+        {
+            YearTaxes = new Dictionary<int, YearTax>();
+        }
+
         public Dictionary<int, YearTax> YearTaxes { get; set; }
     }
 

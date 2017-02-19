@@ -43,5 +43,20 @@ namespace TaxTests
 
             Assert.That(result, Is.EqualTo(0.1m));
         }
+
+        [Test]
+        public void AddsMonthlyTax_WhenYearlyTaxIsPresent()
+        {
+            _sut.AddYearlyTax("a", 2016, 0.1m);
+            _sut.AddMonthlyTax("a", 2016, 5, 0.2m);
+            var result = _sut.GetTax("a", DateTime.Parse("2016.05.02"));
+            Assert.That(result, Is.EqualTo(0.2m));
+
+            result = _sut.GetTax("a", DateTime.Parse("2016.04.02"));
+            Assert.That(result, Is.EqualTo(0.1m));
+
+            result = _sut.GetTax("a", DateTime.Parse("2016.06.02"));
+            Assert.That(result, Is.EqualTo(0.1m));
+        }
     }
 }
