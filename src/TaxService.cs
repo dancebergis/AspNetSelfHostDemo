@@ -41,11 +41,13 @@ namespace AspNetSelfHostDemo
             }
             if (string.IsNullOrEmpty(taxRecord.Day) == false)
             {
-                // TODO check for year/month/week input
                 DateTime dayDateTime;
                 var parseResult = DateTime.TryParse(taxRecord.Day, out dayDateTime);
                 if (!parseResult)
                     throw new ArgumentException("Day property is invalid. Expected date in acceptable format (e.g. YYYY.MM.DD)");
+
+                if (taxRecord.Year.HasValue || taxRecord.Month.HasValue || taxRecord.WeekOfYear.HasValue)
+                    throw new ArgumentException("Only one type of tax can be entered in one request.");
             }
 
 
