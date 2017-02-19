@@ -54,7 +54,7 @@ namespace AspNetSelfHostDemo
         public override void Load()
         {
             Bind<ITaxService>().To<TaxService>();
-            Bind<ITaxRepository>().To<TaxRepository>();
+            Bind<ITaxRepository>().To<TaxRepository>().InSingletonScope();
         }
     }
 }
