@@ -11,7 +11,7 @@ namespace AspNetSelfHostDemo
     {
         public decimal GetTax(string municipality, DateTime date)
         {
-            throw new NotImplementedException();
+            return 5;
         }
     }
 }

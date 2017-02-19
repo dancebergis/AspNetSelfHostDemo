@@ -49,6 +49,12 @@ namespace AspNetSelfHostDemo
                     "Api/{controller}/{id}",
                     new { id = RouteParameter.Optional },
                     new { id = @"\d+" });
+
+            routes.MapHttpRoute(
+                            name: "TaxApi",
+                            routeTemplate: "api/{controller}/{municipality}/{date}",
+                            defaults: new { municipality = RouteParameter.Optional, date = RouteParameter.Optional }
+                        );
         }
     }
 
@@ -72,6 +78,7 @@ namespace AspNetSelfHostDemo
         public override void Load()
         {
             Bind<ISampleDependency>().To<SampleDependency>();
+            Bind<ITaxService>().To<TaxService>();
         }
     }
 
