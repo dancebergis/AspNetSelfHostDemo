@@ -9,38 +9,53 @@ namespace AspNetSelfHostDemo
 {
     public interface ITaxRepository
     {
-        decimal GetAllTaxes();
         decimal GetTax(string city, DateTime date);
     }
 
     public class TaxRepository : ITaxRepository
     {
-        private Dictionary<string, YearTax> _cityTaxes;
+        private Dictionary<string, YearTax> _cityTaxesCache;
 
         public TaxRepository()
         {
-            _cityTaxes = new Dictionary<string, YearTax>();
+            _cityTaxesCache = new Dictionary<string, YearTax>();
             AddYearlyTax("b", 2016, 0.2m);
         }
 
         public void AddYearlyTax(string city, int year, decimal tax)
         {
-            YearTax value = null;
-            if (_cityTaxes.TryGetValue(city, out value))
+            var cityTaxes = GetTaxData(city);
+            if (cityTaxes == null)
             {
-                value.YearlyTax = tax;
+                _cityTaxesCache.Add(city, new YearTax() {YearlyTax = tax});
             }
             else
             {
-                _cityTaxes.Add(city, new YearTax() { YearlyTax = tax });
+                cityTaxes.YearlyTax = tax;
             }
-            
+        }
+
+        public void AddMonthlyTax(string city, int year, int month, decimal tax)
+        {
+            var cityTaxes = GetTaxData(city);
+            if (cityTaxes == null)
+            {
+                cityTaxes = new YearTax();
+                _cityTaxesCache.Add(city, cityTaxes);
+            }
+
+            decimal monthlyTax;
+            if (cityTaxes.MonthTaxes.TryGetValue(month, out monthlyTax))
+            {
+                cityTaxes.MonthTaxes.Remove(month);
+            }
+            cityTaxes.MonthTaxes.Add(month, tax);
         }
 
         public decimal GetTax(string city, DateTime date)
         {
             YearTax taxByYear = null;
-            if (_cityTaxes.TryGetValue(city, out taxByYear) == false)
+            if (_cityTaxesCache.TryGetValue(city, out taxByYear) == false)
             {
                 return 0m;
             }
@@ -51,9 +66,11 @@ namespace AspNetSelfHostDemo
             }
         }
 
-        public decimal GetAllTaxes()
+        private YearTax GetTaxData(string city)
         {
-            return 555;
+            YearTax value = null;
+            _cityTaxesCache.TryGetValue(city, out value);
+            return value;
         }
     }
 }

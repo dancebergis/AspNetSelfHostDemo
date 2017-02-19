@@ -6,14 +6,20 @@ using System.Threading.Tasks;
 
 namespace AspNetSelfHostDemo.Entities
 {
-    class YearTax
+    public class YearTax
     {
         public decimal YearlyTax { get; set; }
         public Dictionary<int, decimal> DayTaxes { get; set; }
         public Dictionary<int, decimal> MonthTaxes { get; set; }
+
+        public YearTax()
+        {
+            DayTaxes = new Dictionary<int, decimal>();
+            MonthTaxes = new Dictionary<int, decimal>();
+        }
     }
 
-    class CityTax
+    public class CityTax
     {
         public string CityName { get; set; }
         public Dictionary<int, YearTax> YearTaxes { get; set; }
