@@ -43,6 +43,10 @@ namespace AspNetSelfHostDemo
             {
                 throw new ArgumentException("City property is missing or invalid");
             }
+            if (taxRecord.Tax.HasValue == false || taxRecord.Tax.Value == 0)
+            {
+                throw new ArgumentException("Tax must have a non-zero value");
+            }
             if (string.IsNullOrEmpty(taxRecord.Day) == false)
             {
                 DateTime dayDateTime;
@@ -52,6 +56,9 @@ namespace AspNetSelfHostDemo
 
                 if (taxRecord.Year.HasValue || taxRecord.Month.HasValue || taxRecord.WeekOfYear.HasValue)
                     throw new ArgumentException("Only one type of tax can be entered in one request.");
+
+                _taxRepository.AddDailyTax(taxRecord.City, dayDateTime.Year, dayDateTime.DayOfYear, taxRecord.Tax.Value);
+                return;
             }
 
 

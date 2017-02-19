@@ -8,6 +8,10 @@ namespace AspNetSelfHostDemo
     public interface ITaxRepository
     {
         decimal GetTax(string city, DateTime date);
+        void AddYearlyTax(string city, int year, decimal tax);
+        void AddMonthlyTax(string city, int year, int month, decimal tax);
+        void AddDailyTax(string city, int year, int dayOfYear, decimal tax);
+        void AddWeeklyTax(string city, int year, int weekOfYear, decimal tax);
     }
 
     public class TaxRepository : ITaxRepository

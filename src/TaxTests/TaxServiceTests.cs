@@ -55,6 +55,20 @@ namespace TaxTests
                 Throws.TypeOf<ArgumentException>().With.Message.Contain("City property"));
         }
 
+        [TestCase(null)]
+        [TestCase(0)]
+        public void ThrowsWhenIncorrectTaxRecord_InvalidTax(decimal? tax)
+        {
+            var taxRecord = new TaxRecord
+            {
+                City = "a",
+                Year = 2016
+            };
+
+            Assert.That(() => _sut.UpdateTaxes(taxRecord),
+                Throws.TypeOf<ArgumentException>().With.Message.Contain("Tax must have a non-zero value"));
+        }
+
         [TestCase(-1)]
         [TestCase(null)]
         public void ThrowsWhenIncorrectTaxRecord_InvalidYear(int? year)
@@ -62,6 +76,7 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
+                Tax = 0.1m,
                 Year = year
             };
 
@@ -77,6 +92,7 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
+                Tax = 0.1m,
                 Year = 2222,
                 Month = month
             };
@@ -92,6 +108,7 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
+                Tax = 0.1m,
                 Year = 2222,
                 Day = day
             };
@@ -111,6 +128,7 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
+                Tax = 0.1m,
                 Year = year,
                 Month = month,
                 WeekOfYear = weekNr,
@@ -127,6 +145,7 @@ namespace TaxTests
             var taxRecord = new TaxRecord
             {
                 City = "a",
+                Tax = 0.1m,
                 Day = "2016.02.02"
             };
             _sut.UpdateTaxes(taxRecord);
