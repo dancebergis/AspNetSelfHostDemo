@@ -57,7 +57,7 @@ namespace AspNetSelfHostDemo
                 if (taxRecord.Year.HasValue || taxRecord.Month.HasValue || taxRecord.WeekOfYear.HasValue)
                     throw new ArgumentException("Only one type of tax can be entered in one request.");
 
-                _taxRepository.AddDailyTax(taxRecord.City, dayDateTime.Year, dayDateTime.DayOfYear, taxRecord.Tax.Value);
+                _taxRepository.AddDailyTax(taxRecord.City, dayDateTime, taxRecord.Tax.Value);
                 return;
             }
 

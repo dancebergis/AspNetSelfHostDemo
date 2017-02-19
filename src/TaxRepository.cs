@@ -10,7 +10,7 @@ namespace AspNetSelfHostDemo
         decimal GetTax(string city, DateTime date);
         void AddYearlyTax(string city, int year, decimal tax);
         void AddMonthlyTax(string city, int year, int month, decimal tax);
-        void AddDailyTax(string city, int year, int dayOfYear, decimal tax);
+        void AddDailyTax(string city, DateTime day, decimal tax);
         void AddWeeklyTax(string city, int year, int weekOfYear, decimal tax);
     }
 
@@ -49,16 +49,16 @@ namespace AspNetSelfHostDemo
             yearlyTax.MonthTaxes.Add(month, tax);
         }
 
-        public void AddDailyTax(string city, int year, int dayOfYear, decimal tax)
+        public void AddDailyTax(string city, DateTime day, decimal tax)
         {
-            var yearlyTax = GetYearlyTaxesOrInit(city, year);
+            var yearlyTax = GetYearlyTaxesOrInit(city, day.Year);
 
             decimal daylyTax;
-            if (yearlyTax.DayTaxes.TryGetValue(dayOfYear, out daylyTax))
+            if (yearlyTax.DayTaxes.TryGetValue(day.DayOfYear, out daylyTax))
             {
-                yearlyTax.DayTaxes.Remove(dayOfYear);
+                yearlyTax.DayTaxes.Remove(day.DayOfYear);
             }
-            yearlyTax.DayTaxes.Add(dayOfYear, tax);
+            yearlyTax.DayTaxes.Add(day.DayOfYear, tax);
         }
 
         public void AddWeeklyTax(string city, int year, int weekOfYear, decimal tax)

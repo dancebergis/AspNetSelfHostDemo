@@ -71,8 +71,8 @@ namespace TaxTests
             _sut.AddYearlyTax("a", 2016, 0.1m);
             _sut.AddMonthlyTax("a", 2016, 5, 0.2m);
             _sut.AddMonthlyTax("a", 2016, 7, 0.5m);
-            _sut.AddDailyTax("a", 2016, DateTime.Parse("2016.07.07").DayOfYear, 0.7m);
-            _sut.AddDailyTax("a", 2016, 40, 0.8m);
+            _sut.AddDailyTax("a", DateTime.Parse("2016.07.07"), 0.7m);
+            _sut.AddDailyTax("a", DateTime.Parse("2016.02.09"), 0.8m);
             var result = _sut.GetTax("a", DateTime.Parse("2016.05.02"));
             Assert.That(result, Is.EqualTo(0.2m));
 
@@ -95,8 +95,8 @@ namespace TaxTests
         {
             _sut.AddYearlyTax("a", 2016, 0.1m);
             _sut.AddMonthlyTax("a", 2016, 2, 0.2m);
-            _sut.AddDailyTax("a", 2016, DateTime.Parse("2016.02.10").DayOfYear, 0.5m);
-            _sut.AddDailyTax("a", 2016, DateTime.Parse("2016.02.14").DayOfYear, 0.7m);
+            _sut.AddDailyTax("a", DateTime.Parse("2016.02.10"), 0.5m);
+            _sut.AddDailyTax("a", DateTime.Parse("2016.02.14"), 0.7m);
             _sut.AddWeeklyTax("a", 2016, 2, 2.1m);  //2nd week: 01.04 - 01.10
             _sut.AddWeeklyTax("a", 2016, 7, 2.2m);  //7th week: 02.08 - 02.14
 
