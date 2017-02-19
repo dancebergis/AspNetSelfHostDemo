@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AspNetSelfHostDemo.Entities;
 
 namespace AspNetSelfHostDemo
@@ -11,10 +12,18 @@ namespace AspNetSelfHostDemo
 
     public class TaxRepository : ITaxRepository
     {
+        private const decimal NoTax = 0m;
         private readonly Dictionary<string, CityTax> _cityTaxesCache;
+        private readonly Calendar _cal;
+        private readonly CalendarWeekRule _weekRule;
+        private readonly DayOfWeek _firstDayOfWeek;
 
         public TaxRepository()
         {
+            // TODO these 2 could be loaded from config
+            _cal = DateTimeFormatInfo.InvariantInfo.Calendar;
+            _weekRule = CalendarWeekRule.FirstDay;
+            _firstDayOfWeek = DayOfWeek.Monday;
             _cityTaxesCache = new Dictionary<string, CityTax>();
         }
 
@@ -48,26 +57,44 @@ namespace AspNetSelfHostDemo
             yearlyTax.DayTaxes.Add(dayOfYear, tax);
         }
 
+        public void AddWeeklyTax(string city, int year, int weekOfYear, decimal tax)
+        {
+            var yearlyTax = GetYearlyTaxesOrInit(city, year);
+
+            decimal weeklyTax;
+            if (yearlyTax.WeekTaxes.TryGetValue(weekOfYear, out weeklyTax))
+            {
+                yearlyTax.WeekTaxes.Remove(weekOfYear);
+            }
+            yearlyTax.WeekTaxes.Add(weekOfYear, tax);
+        }
+
         public decimal GetTax(string city, DateTime date)
         {
-            CityTax cityTaxes = null;
+            CityTax cityTaxes;
             if (_cityTaxesCache.TryGetValue(city, out cityTaxes) == false)
             {
-                return 0m;
+                return NoTax;
             }
 
-            // TODO upgrade logic: weeks
             YearTax cityTax;
-            if (cityTaxes.YearTaxes.TryGetValue(date.Year, out cityTax))
+            if (!cityTaxes.YearTaxes.TryGetValue(date.Year, out cityTax)) return NoTax;
+
+            decimal dailyTax, weeklyTax, monthlyTax;
+            if (cityTax.DayTaxes.TryGetValue(date.DayOfYear, out dailyTax))
             {
-                decimal dailyTax, monthlyTax;
-                if (cityTax.DayTaxes.TryGetValue(date.DayOfYear, out dailyTax))
-                {
-                    return dailyTax;
-                }
-                return cityTax.MonthTaxes.TryGetValue(date.Month, out monthlyTax) ? monthlyTax : cityTax.YearlyTax;
+                return dailyTax;
             }
-            return 0m;
+
+            // fallback to Weekly Taxes
+            var weekOfYear = _cal.GetWeekOfYear(date, _weekRule, _firstDayOfWeek);
+            if (cityTax.WeekTaxes.TryGetValue(weekOfYear, out weeklyTax))
+            {
+                return weeklyTax;
+            }
+
+            // fallback to Montly and Yearly Taxes
+            return cityTax.MonthTaxes.TryGetValue(date.Month, out monthlyTax) ? monthlyTax : cityTax.YearlyTax;
         }
 
         private CityTax GetCityTaxes(string city)
@@ -82,7 +109,7 @@ namespace AspNetSelfHostDemo
             return cityTaxes;
         }
 
-        private YearTax GetYearlyTaxesOrInit(string city, int year, decimal tax = 0m)
+        private YearTax GetYearlyTaxesOrInit(string city, int year, decimal tax = NoTax)
         {
             var cityTaxes = GetCityTaxes(city);
 

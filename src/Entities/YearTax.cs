@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AspNetSelfHostDemo.Entities
 {
@@ -10,23 +6,14 @@ namespace AspNetSelfHostDemo.Entities
     {
         public decimal YearlyTax { get; set; }
         public Dictionary<int, decimal> DayTaxes { get; set; }
+        public Dictionary<int, decimal> WeekTaxes { get; set; }
         public Dictionary<int, decimal> MonthTaxes { get; set; }
 
         public YearTax()
         {
             DayTaxes = new Dictionary<int, decimal>();
+            WeekTaxes = new Dictionary<int, decimal>();
             MonthTaxes = new Dictionary<int, decimal>();
         }
     }
-
-    public class CityTax
-    {
-        public CityTax()
-        {
-            YearTaxes = new Dictionary<int, YearTax>();
-        }
-
-        public Dictionary<int, YearTax> YearTaxes { get; set; }
-    }
-
 }

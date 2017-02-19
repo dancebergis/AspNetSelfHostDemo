@@ -116,7 +116,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\DayTax.cs" />
+    <Compile Include="Entities\CityTax.cs" />
+    <Compile Include="Entities\YearTax.cs" />
     <Compile Include="TaxController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
