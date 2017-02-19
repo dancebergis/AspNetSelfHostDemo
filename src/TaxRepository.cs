@@ -20,30 +20,13 @@ namespace AspNetSelfHostDemo
 
         public void AddYearlyTax(string city, int year, decimal tax)
         {
-            var cityTaxes = GetCityTaxes(city);
-
-            YearTax yearlyTax;
-            if (cityTaxes.YearTaxes.TryGetValue(year, out yearlyTax))
-            {
-                yearlyTax.YearlyTax = tax;
-            }
-            else
-            {
-                yearlyTax = new YearTax {YearlyTax = tax};
-                cityTaxes.YearTaxes.Add(year, yearlyTax);
-            }
+            var yearlyTax = GetYearlyTaxesOrInit(city, year);
+            yearlyTax.YearlyTax = tax;
         }
 
         public void AddMonthlyTax(string city, int year, int month, decimal tax)
         {
-            var cityTaxes = GetCityTaxes(city);
-
-            YearTax yearlyTax;
-            if (cityTaxes.YearTaxes.TryGetValue(year, out yearlyTax) == false)
-            {
-                yearlyTax = new YearTax();
-                cityTaxes.YearTaxes.Add(year, yearlyTax);
-            }
+            var yearlyTax = GetYearlyTaxesOrInit(city, year);
 
             decimal monthlyTax;
             if (yearlyTax.MonthTaxes.TryGetValue(month, out monthlyTax))
@@ -51,6 +34,18 @@ namespace AspNetSelfHostDemo
                 yearlyTax.MonthTaxes.Remove(month);
             }
             yearlyTax.MonthTaxes.Add(month, tax);
+        }
+
+        public void AddDailyTax(string city, int year, int dayOfYear, decimal tax)
+        {
+            var yearlyTax = GetYearlyTaxesOrInit(city, year);
+
+            decimal daylyTax;
+            if (yearlyTax.DayTaxes.TryGetValue(dayOfYear, out daylyTax))
+            {
+                yearlyTax.DayTaxes.Remove(dayOfYear);
+            }
+            yearlyTax.DayTaxes.Add(dayOfYear, tax);
         }
 
         public decimal GetTax(string city, DateTime date)
@@ -61,16 +56,16 @@ namespace AspNetSelfHostDemo
                 return 0m;
             }
 
-            // TODO upgrade logic: weeks, days
+            // TODO upgrade logic: weeks
             YearTax cityTax;
             if (cityTaxes.YearTaxes.TryGetValue(date.Year, out cityTax))
             {
-                decimal monthlyTax;
-                if (cityTax.MonthTaxes.TryGetValue(date.Month, out monthlyTax))
+                decimal dailyTax, monthlyTax;
+                if (cityTax.DayTaxes.TryGetValue(date.DayOfYear, out dailyTax))
                 {
-                    return monthlyTax;
+                    return dailyTax;
                 }
-                return cityTax.YearlyTax;
+                return cityTax.MonthTaxes.TryGetValue(date.Month, out monthlyTax) ? monthlyTax : cityTax.YearlyTax;
             }
             return 0m;
         }
@@ -86,5 +81,20 @@ namespace AspNetSelfHostDemo
             }
             return cityTaxes;
         }
+
+        private YearTax GetYearlyTaxesOrInit(string city, int year, decimal tax = 0m)
+        {
+            var cityTaxes = GetCityTaxes(city);
+
+            YearTax yearlyTax;
+            if (cityTaxes.YearTaxes.TryGetValue(year, out yearlyTax))
+            {
+                return yearlyTax;
+            }
+            yearlyTax = new YearTax() {YearlyTax = tax};
+            cityTaxes.YearTaxes.Add(year, yearlyTax);
+            return yearlyTax;
+        }
+
     }
 }
