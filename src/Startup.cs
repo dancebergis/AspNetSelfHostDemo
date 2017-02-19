@@ -34,6 +34,12 @@ namespace AspNetSelfHostDemo
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Routes.MapHttpRoute(
+                            name: "TaxApi",
+                            routeTemplate: "api/{controller}/{municipality}/{date}",
+                            defaults: new { municipality = RouteParameter.Optional, date = RouteParameter.Optional }
+                        );
+
             // Web Api
             app.UseWebApi(config);
 

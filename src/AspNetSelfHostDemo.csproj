@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="CustomContentTypeProvider.cs" />
     <Compile Include="CustomMiddleware.cs" />
+    <Compile Include="TaxController.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="NancyDemo.cs" />
     <Compile Include="Program.cs" />
