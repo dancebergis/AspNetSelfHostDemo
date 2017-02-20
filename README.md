@@ -1,30 +1,22 @@
-# Requirements done [+], undone [-]:
+# Requirements done [+], not done [-]:
 
 [-] It has its own database where municipality taxes are stored
-
 [+] Taxes should have ability to be scheduled (yearly, monthly ,weekly ,daily) for each municipality
-
 [-] Application should have ability to import municipalities data from file (choose one data format you believe is suitable)
-
 [+] Application should have ability to insert new records for municipality taxes (one record at a time)
-
 [+] User can ask for a specific municipality tax by entering municipality name and date
-
 [+] Errors needs to be handled i.e. internal errors should not to be exposed to the end user
-
 [+] You should ensure that application works correctly
-
 
 # Extra:
 
-* Application is deployed as a self-hosted windows service > if you build TaxManager project and run it as a service
-
+* Application is deployed as a self-hosted windows service > if you build TaxManager project and run it as a service ?
 * Update record functionality is exposed via API > if webService that accepts HTTP POST is ok?
 
 # Usage:
 
 "Producer service" : Build TaxManager. Run.
-"Consumer service" : get Postman (https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop). Do HTTP requests. Samples are included (Tax test.postman_collection.json)
+"Consumer service" : here it is -> https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop. Use it to do HTTP requests. Samples are included (Tax test.postman_collection.json)
 
 Examples:
 
