@@ -1,11 +1,17 @@
 # Requirements done [+], not done [-]:
 
 [-] It has its own database where municipality taxes are stored
+
 [+] Taxes should have ability to be scheduled (yearly, monthly ,weekly ,daily) for each municipality
+
 [-] Application should have ability to import municipalities data from file (choose one data format you believe is suitable)
+
 [+] Application should have ability to insert new records for municipality taxes (one record at a time)
+
 [+] User can ask for a specific municipality tax by entering municipality name and date
+
 [+] Errors needs to be handled i.e. internal errors should not to be exposed to the end user
+
 [+] You should ensure that application works correctly
 
 # Extra:
