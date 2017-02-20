@@ -1,0 +1,135 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Tax test",
+		"_postman_id": "42a73e42-b606-7282-187a-03e0c07154fd",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get B city tax for 2016.10.15",
+			"request": {
+				"url": "http://localhost:8080/api/tax/b/2016.10.15",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save daily tax",
+			"request": {
+				"url": "http://localhost:8080/api/tax",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 999.6,\n\t\"Day\": \"2016-10-10\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save daily tax - invalid",
+			"request": {
+				"url": "http://localhost:8080/api/tax",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 5,\n\t\"Day\": \"2016-10-10\",\n\t\"Year\": 2222\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get B city tax for 2016.10.10",
+			"request": {
+				"url": "http://localhost:8080/api/tax/b/2016.10.10",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save monthly tax",
+			"request": {
+				"url": "http://localhost:8080/api/tax",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 22,\n\t\"Day\": \"2016-10-10\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save yearly tax",
+			"request": {
+				"url": "http://localhost:8080/api/tax",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 5,\n\t\"Year\": 2016\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get B city tax for 2016.11.01",
+			"request": {
+				"url": "http://localhost:8080/api/tax/b/2016.11.01",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get C city tax for 2016.11.01",
+			"request": {
+				"url": "http://localhost:8080/api/tax/c/2016.11.01",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
