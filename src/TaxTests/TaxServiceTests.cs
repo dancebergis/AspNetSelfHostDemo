@@ -101,6 +101,23 @@ namespace TaxTests
                 Throws.TypeOf<ArgumentException>().With.Message.Contain("Month property"));
         }
 
+        [TestCase(2016, 0)]
+        [TestCase(2016, -1)]
+        [TestCase(2016, 54)]
+        public void ThrowsWhenIncorrectTaxRecord_InvalidWeek(int year, int? week)
+        {
+            var taxRecord = new TaxRecord
+            {
+                City = "a",
+                Tax = 0.1m,
+                Year = year,
+                WeekOfYear = week
+            };
+
+            Assert.That(() => _sut.UpdateTaxes(taxRecord),
+                Throws.TypeOf<ArgumentException>().With.Message.Contain("Week property"));
+        }
+
         [TestCase("xxx")]
         [TestCase("2016.13.01")]
         public void ThrowsWhenIncorrectTaxRecord_InvalidDay(string day)
@@ -140,15 +157,52 @@ namespace TaxTests
         }
 
         [Test]
-        public void UpdatesTaxesByDay()
+        public void ThrowsWhenIncorrectTaxRecord_MonthAndWeekTypeIsPresent()
         {
             var taxRecord = new TaxRecord
             {
                 City = "a",
                 Tax = 0.1m,
-                Day = "2016.02.02"
+                Year = 2222,
+                Month = 1,
+                WeekOfYear = 1
             };
+
+            Assert.That(() => _sut.UpdateTaxes(taxRecord),
+                Throws.TypeOf<ArgumentException>().With.Message.Contain("one type of tax"));
+        }
+
+        [Test]
+        public void UpdatesTaxesByDay()
+        {
+            var taxRecord = new TaxRecord { City = "a", Tax = 0.1m, Day = "2016.02.02" };
             _sut.UpdateTaxes(taxRecord);
+            _taxRepository.Verify(m => m.AddDailyTax("a", DateTime.Parse("2016.02.02"), 0.1m), Times.Once);
+        }
+
+        [Test]
+        public void UpdatesTaxesByYear()
+        {
+            var taxRecord = new TaxRecord { City = "a", Tax = 0.1m, Year = 2016 };
+            _sut.UpdateTaxes(taxRecord);
+            _taxRepository.Verify(m => m.AddYearlyTax("a", 2016, 0.1m), Times.Once);
+            // TODO check that "AddMonthly/Weekly/DaylyTask" was called 0 times
+        }
+
+        [Test]
+        public void UpdatesTaxesByMonth()
+        {
+            var taxRecord = new TaxRecord { City = "a", Tax = 0.1m, Year = 2016, Month = 2};
+            _sut.UpdateTaxes(taxRecord);
+            _taxRepository.Verify(m => m.AddMonthlyTax("a", 2016, 2, 0.1m), Times.Once);
+        }
+
+        [Test]
+        public void UpdatesTaxesByWeek()
+        {
+            var taxRecord = new TaxRecord { City = "a", Tax = 0.1m, Year = 2016, WeekOfYear = 3 };
+            _sut.UpdateTaxes(taxRecord);
+            _taxRepository.Verify(m => m.AddWeeklyTax("a", 2016, 3, 0.1m), Times.Once);
         }
     }
 }

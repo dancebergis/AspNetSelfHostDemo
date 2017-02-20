@@ -62,19 +62,31 @@ namespace AspNetSelfHostDemo
             }
 
 
-            if (taxRecord.Year.HasValue == false || taxRecord.Year.Value < 0)
+            var year = taxRecord.Year ?? -1;
+            if (year < 0)
             {
                 throw new ArgumentException("Year property is missing or invalid");
             }
-            // TODO if no month/week value, update by year
-
-
-            // TODO check xor for month & week
-            if (taxRecord.Month.HasValue && (taxRecord.Month.Value < 1 || taxRecord.Month.Value > 12))
+            
+            if (taxRecord.Month.HasValue)
             {
-                throw new ArgumentException("Month property is invalid. Valid range: 1-12");
+                if (taxRecord.Month.Value < 1 || taxRecord.Month.Value > 12)
+                    throw new ArgumentException("Month property is invalid. Valid range: 1-12");
+                if (taxRecord.WeekOfYear.HasValue)
+                    throw new ArgumentException("Only one type of tax can be entered in one request.");
+                _taxRepository.AddMonthlyTax(taxRecord.City, year, taxRecord.Month.Value, taxRecord.Tax.Value);
+                return;
+            }
+            if (taxRecord.WeekOfYear.HasValue)
+            {
+                var weekOfYear = taxRecord.WeekOfYear.Value;
+                var lastWeekOfYear = CalendarHelper.GetWeekOfYear(new DateTime(year, 12, 31));
+                if (weekOfYear < 1 || weekOfYear > lastWeekOfYear)
+                    throw new ArgumentException("Week property is invalid. Valid range: 1..52 (or 53, or 54 - depends on year)");
+                _taxRepository.AddWeeklyTax(taxRecord.City, year, weekOfYear, taxRecord.Tax.Value);
             }
 
+            _taxRepository.AddYearlyTax(taxRecord.City, year, taxRecord.Tax.Value);
         }
     }
 }

@@ -18,16 +18,9 @@ namespace AspNetSelfHostDemo
     {
         private const decimal NoTax = 0m;
         private readonly Dictionary<string, CityTax> _cityTaxesCache;
-        private readonly Calendar _cal;
-        private readonly CalendarWeekRule _weekRule;
-        private readonly DayOfWeek _firstDayOfWeek;
 
         public TaxRepository()
         {
-            // TODO these 2 could be loaded from config
-            _cal = DateTimeFormatInfo.InvariantInfo.Calendar;
-            _weekRule = CalendarWeekRule.FirstDay;
-            _firstDayOfWeek = DayOfWeek.Monday;
             _cityTaxesCache = new Dictionary<string, CityTax>();
         }
 
@@ -91,7 +84,7 @@ namespace AspNetSelfHostDemo
             }
 
             // fallback to Weekly Taxes
-            var weekOfYear = _cal.GetWeekOfYear(date, _weekRule, _firstDayOfWeek);
+            var weekOfYear = CalendarHelper.GetWeekOfYear(date);
             if (cityTax.WeekTaxes.TryGetValue(weekOfYear, out weeklyTax))
             {
                 return weeklyTax;

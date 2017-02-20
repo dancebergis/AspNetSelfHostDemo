@@ -141,8 +141,7 @@ namespace TaxTests
         [TestCase("2016.01.10", 2)]     // next sunday
         [TestCase("2016.02.07", 6)]     // sunday of 6th week
         [TestCase("2016.02.08", 7)]     // monday of 7th week
-        [TestCase("2015.12.31", 53)]
-        
+        [TestCase("2016.12.31", 53)]
         public void TestCalendar(string date, int expectedWeekOfTheYear)
         {
             Calendar cal = DateTimeFormatInfo.InvariantInfo.Calendar;
