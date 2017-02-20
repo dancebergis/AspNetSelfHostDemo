@@ -83,7 +83,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 22,\n\t\"Day\": \"2016-10-10\"\n}"
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 22,\n\t\"Year\": 2016,\n\t\"Month\": 10\n}"
 				},
 				"description": ""
 			},
@@ -127,6 +127,26 @@
 				"method": "GET",
 				"header": [],
 				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save weekly tax",
+			"request": {
+				"url": "http://localhost:8080/api/tax",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"City\": \"b\",\n\t\"Tax\": 22,\n\t\"Year\": 2016,\n\t\"Month\": 10\n}"
+				},
 				"description": ""
 			},
 			"response": []
