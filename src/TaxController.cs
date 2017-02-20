@@ -40,7 +40,7 @@ namespace AspNetSelfHostDemo
             try
             {
                 _taxService.UpdateTaxes(taxRecord);
-                return "OK";
+                return "Taxes updated";
             }
             catch (ArgumentException e)
             {
